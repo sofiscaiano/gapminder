@@ -1,6 +1,7 @@
 library(gapminder)
 library(dplyr)
 library(tidyverse)
+library(ggplot2)
 
 fraction_by_continent <- gapminder %>%
   filter(year == 2002) %>%
@@ -10,7 +11,7 @@ fraction_by_continent <- gapminder %>%
 
 ggplot(fraction_by_continent, aes(x = continent, y = total_pop)) +
   geom_col() +
-  ggtitle("Población total por continente (2002)")
+  ggtitle("Total population by continent (2002)") 
 
 pop_by_continent <- gapminder %>%
   group_by(continent, year) %>%
@@ -18,7 +19,8 @@ pop_by_continent <- gapminder %>%
 
 ggplot(pop_by_continent, aes(x = year, y = total_pop, color = continent)) +
   geom_line() +
-  expand_limits(y = 0)
+  expand_limits(y = 0) +
+  ggtitle ("Total population by continent (1950-2007)")
 
 gapminder_2007 <- gapminder %>%
   group_by(continent) %>%
@@ -28,25 +30,28 @@ gapminder_2007 <- gapminder %>%
 ggplot(gapminder_2007, aes(x = gdpPercap, y = pop, color= continent)) +
   geom_point() +
   scale_y_log10() +
-  scale_x_log10()
+  scale_x_log10() +
+  ggtitle ("GDP & Population no correlation (2007)")
 
 ggplot(gapminder_2007, aes(x = gdpPercap, y = lifeExp, color= continent)) +
   geom_point() +
-  scale_x_log10()
+  scale_x_log10() +
+  ggtitle ("GDP & life expectancy linear relationship (2007)")
 
 gapminder_America <- gapminder %>%
   filter(country %in% c("Argentina", "Brazil", "Uruguay", "Chile", "Bolivia", "Paraguay", "Colombia", "Ecuador"))
 
-gapminder_America
-
 ggplot(gapminder_America, aes(x = year, y = lifeExp, color = country)) +
-  geom_line()
+  geom_line() +
+  ggtitle("Life expectancy growth in South America (1950-2007)")
 
 gapminder_selected <- gapminder %>% 
   filter(country %in% c("Japan", "Argentina", "China", "United States"))
 
 ggplot(gapminder_selected, aes(x = year, y = gdpPercap, color = country)) +
-  geom_line()
+  geom_line() +
+  ggtitle("GDP growth in selected countries (1950-2007)")
+
 
 
          
