@@ -33,10 +33,11 @@ ggplot(gapminder_2007, aes(x = gdpPercap, y = pop, color= continent)) +
   scale_x_log10() +
   ggtitle ("GDP & Population no correlation (2007)")
 
-ggplot(gapminder_2007, aes(x = gdpPercap, y = lifeExp, color= continent)) +
+ggplot(gapminder_2007, aes(x = gdpPercap, y = lifeExp, color = continent, size = pop)) +
   geom_point() +
   scale_x_log10() +
-  ggtitle ("GDP & life expectancy linear relationship (2007)")
+  ggtitle ("GDP & life expectancy linear relationship (2007)") +
+  facet_wrap(~continent)
 
 gapminder_America <- gapminder %>%
   filter(country %in% c("Argentina", "Brazil", "Uruguay", "Chile", "Bolivia", "Paraguay", "Colombia", "Ecuador"))
@@ -52,6 +53,39 @@ ggplot(gapminder_selected, aes(x = year, y = gdpPercap, color = country)) +
   geom_line() +
   ggtitle("GDP growth in selected countries (1950-2007)")
 
+#Countries with the largest life expectancy per continent (2007)
+gapminder %>%
+  group_by(continent) %>%
+  filter(year == 2007) %>%
+  top_n (1, lifeExp) %>%
+  arrange(desc(lifeExp))
 
+#Percent of global population by country (2007)
+gapminder %>%
+  filter(year == 2007) %>%
+  transmute (country, continent, year, pop, total_pop = sum(pop), fraction = pop / total_pop) %>%
+  arrange (desc(fraction))
 
+#Country with the highest percent of population by continent (1952)
+  gapminder %>%
+    filter(year == 1952) %>%
+    transmute (country, continent, year, pop, total_pop = sum(pop), fraction = pop / total_pop) %>%
+    arrange (desc(fraction)) %>%
+    group_by(continent) %>%
+    top_n(1, fraction)
+
+#Country with the highest percent of population by continent (2007)
+gapminder %>%
+  filter(year == 2007) %>%
+  transmute (country, continent, year, pop, total_pop = sum(pop), fraction = pop / total_pop) %>%
+  arrange (desc(fraction)) %>%
+  group_by(continent) %>%
+  top_n(1, fraction)
+
+#Gapminder arrange by GDP Per capita (2007)
+gapminder %>%
+  filter(year == 2007) %>%
+  group_by(continent) %>%
+  arrange(desc(gdpPercap))
+  
          
